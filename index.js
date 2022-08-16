@@ -29,6 +29,7 @@ function operation() {
             case 'Consultar Saldo':
                 break
             case 'Depositar':
+                deposit()
                 break
             case 'Sacar':
                 break
@@ -65,8 +66,7 @@ function buildAccount() {
 
         if(fs.existsSync(`accounts/${accountName}.json`)) {
             console.log(chalk.bgRed.black('Esta conta já existe, escolha outro nome!'))
-            buildAccount()
-            return
+            return buildAccount()
         }
 
         fs.writeFileSync(`accounts/${accountName}.json`, '{"balance": 0}', (err) => {
@@ -78,4 +78,30 @@ function buildAccount() {
     }).catch((err) => {
         console.log(err)
     })
+}
+
+// add an amount to user account
+function deposit() {
+    inquirer.prompt([{
+        name: 'accountName',
+        message: 'Qual o nome da sua Conta?'
+    }]).then((answer) => {
+        const accountName = answer['accountName']
+
+        // verify if account exists
+        if(!checkAccounts(accountName)) {
+            return deposit()
+        }
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+function checkAccounts(accountName) {
+    if(!fs.existsSync(`accounts/${accountName}.json`)) {
+        console.log(chalk.bgRed.black('Esta conta não existe, ecolha outro nome!'))
+        return false
+    }
+
+    return true
 }
