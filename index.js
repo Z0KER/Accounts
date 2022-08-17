@@ -33,6 +33,7 @@ function operation() {
                 deposit()
                 break
             case 'Sacar':
+                withdraw()
                 break
             case 'Sair':
                 console.log(chalk.bgBlue.black('Obrigado por usar o Accounts'))
@@ -163,6 +164,33 @@ function getAccountBalance() {
 
         console.log(chalk.bgBlue.black(`Olá, o saldo da sua conta é de R$${accountData.balance}`))
         operation()
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+// withdraw an amount from user account
+function withdraw() {
+    inquirer.prompt([{
+        name: 'accountName',
+        message: 'Qual o nome d asua conta?'
+    }]).then((answer) => {
+        const accountName = answer['accountName']
+
+        if(!checkAccounts(accountName)) {
+            return withdraw()
+        }
+
+        inquirer.prompt([{
+            name: 'amount',
+            message: 'Quanto você deseja sacar?'
+        }]).then((answer) => {
+            const amount = answer['amount']
+            console.log(amount)
+            operation()
+        }).catch((err) => {
+            console.log(err)
+        })
     }).catch((err) => {
         console.log(err)
     })
