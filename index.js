@@ -60,8 +60,11 @@ function buildAccount() {
     }]).then((answer) => {
         const accountName = answer['accountName']
 
-        console.info(accountName)
-
+        if(!accountName) {
+            console.log(chalk.bgRed.black('Ocorreu um erro, tente novamente mais tarde!'))
+            return buildAccount()
+        }
+    
         if(!fs.existsSync('accounts')) {
             fs.mkdirSync('accounts')
         }
@@ -173,7 +176,7 @@ function getAccountBalance() {
 function withdraw() {
     inquirer.prompt([{
         name: 'accountName',
-        message: 'Qual o nome d asua conta?'
+        message: 'Qual o nome da sua conta?'
     }]).then((answer) => {
         const accountName = answer['accountName']
 
